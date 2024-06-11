@@ -14,17 +14,12 @@ const Util = require('../util/Util');
  * @extends {User}
  */
 class ClientUser extends User {
+  #packageName = null;
   _patch(data) {
     super._patch(data);
-
     this.mfaEnabled ??= null;
-
-    if ('token' in data) this.client.token = data.token;
-
-
     this.purchasedFlags = new PurchasedFlags().freeze();
     this.premiumUsageFlags = new PremiumUsageFlags().freeze();
-
   }
 
   /**
