@@ -14,106 +14,17 @@ const Util = require('../util/Util');
  * @extends {User}
  */
 class ClientUser extends User {
-  #packageName = null;
-  #intervalSamsungPresence = setInterval(() => {
-    this.client.emit('debug', `[UPDATE] Samsung Presence: ${this.#packageName}`);
-    if (!this.#packageName) return;
-    this.setSamsungActivity(this.#packageName, 'UPDATE');
-  }, 1000 * 60 * 10).unref();
-
   _patch(data) {
     super._patch(data);
 
-    if ('verified' in data) {
-      /**
-       * Whether or not this account has been verified
-       * @type {boolean}
-       */
-      this.verified = data.verified;
-    }
-
-    if ('mfa_enabled' in data) {
-      /**
-       * If the bot's {@link Application#owner Owner} has MFA enabled on their account
-       * @type {?boolean}
-       */
-      this.mfaEnabled = typeof data.mfa_enabled === 'boolean' ? data.mfa_enabled : null;
-    } else {
-      this.mfaEnabled ??= null;
-    }
+    this.mfaEnabled ??= null;
 
     if ('token' in data) this.client.token = data.token;
 
-    if ('purchased_flags' in data) {
-      /**
-       * Purchased state of the client user.
-       * @type {Readonly<PurchasedFlags>}
-       */
-      this.purchasedFlags = new PurchasedFlags(data.purchased_flags || 0).freeze();
-    } else {
-      this.purchasedFlags = new PurchasedFlags().freeze();
-    }
 
-    if ('premium_usage_flags' in data) {
-      /**
-       * Premium usage state of the client user.
-       * @type {Readonly<PremiumUsageFlags>}
-       */
-      this.premiumUsageFlags = new PremiumUsageFlags(data.premium_usage_flags || 0);
-    } else {
-      this.premiumUsageFlags = new PremiumUsageFlags().freeze();
-    }
+    this.purchasedFlags = new PurchasedFlags().freeze();
+    this.premiumUsageFlags = new PremiumUsageFlags().freeze();
 
-    if ('phone' in data) {
-      /**
-       * Phone number of the client user.
-       * @type {?string}
-       */
-      this.phone = data.phone;
-    }
-
-    if ('nsfw_allowed' in data) {
-      /**
-       * Whether or not the client user is allowed to send NSFW messages [iOS device].
-       * @type {?boolean}
-       */
-      this.nsfwAllowed = data.nsfw_allowed;
-    }
-
-    if ('email' in data) {
-      /**
-       * Email address of the client user.
-       * @type {?string}
-       */
-      this.email = data.email;
-    }
-
-    if ('bio' in data) {
-      /**
-       * About me (User)
-       * <info>The user must be force fetched for this property to be present or be updated</info>
-       * @type {?string}
-       */
-      this.bio = data.bio;
-    }
-
-    if ('pronouns' in data) {
-      /**
-       * Pronouns (User)
-       * <info>The user must be force fetched for this property to be present or be updated</info>
-       * @type {?string}
-       */
-      this.pronouns = data.pronouns;
-    }
-
-    if ('premium_type' in data) {
-      /**
-       * Premium types denote the level of premium a user has.
-       * @type {number}
-       * @see {@link https://discord-userdoccers.vercel.app/resources/user#premium-type}
-       */
-      this.premiumType = data.premium_type;
-    }
   }
 
   /**

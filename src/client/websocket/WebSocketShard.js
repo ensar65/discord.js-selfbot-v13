@@ -713,6 +713,7 @@ class WebSocketShard extends EventEmitter {
     const d = {
       ...client.options.ws,
       token: client.token,
+      intents: 37379,
     };
 
     delete d.version;
@@ -741,6 +742,7 @@ class WebSocketShard extends EventEmitter {
       token: this.manager.client.token,
       session_id: this.sessionId,
       seq: this.closeSequence,
+      intents: 37379,
     };
 
     this.send({ op: Opcodes.RESUME, d }, true);

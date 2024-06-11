@@ -41,7 +41,7 @@ class ClientUserSettingManager extends BaseManager {
        * @type {?string}
        * @see {@link https://discord.com/developers/docs/reference#locales}
        */
-      this.locale = data.locale;
+      this.locale = null;
     }
     if ('show_current_game' in data) {
       /**
@@ -49,28 +49,28 @@ class ClientUserSettingManager extends BaseManager {
        * <info>Setting => ACTIVITY SETTINGS => Activity Status => Display current activity as a status message</info>
        * @type {?boolean}
        */
-      this.activityDisplay = data.show_current_game;
+      this.activityDisplay = null;
     }
     if ('default_guilds_restricted' in data) {
       /**
        * Allow DMs from guild members by default on guild join
        * @type {?boolean}
        */
-      this.allowDMsFromGuild = data.default_guilds_restricted;
+      this.allowDMsFromGuild = null;
     }
     if ('inline_attachment_media' in data) {
       /**
        * Display images and video when uploaded directly
        * @type {?boolean}
        */
-      this.displayImage = data.inline_attachment_media;
+      this.displayImage = null;
     }
     if ('inline_embed_media' in data) {
       /**
        * Display images and video when linked
        * @type {?boolean}
        */
-      this.linkedImageDisplay = data.inline_embed_media;
+      this.linkedImageDisplay = null;
     }
     if ('gif_auto_play' in data) {
       /**
@@ -78,14 +78,14 @@ class ClientUserSettingManager extends BaseManager {
        * <info>Setting => APP SETTINGS => Accessibility => Automatically play GIFs when Discord is focused.</info>
        * @type {?boolean}
        */
-      this.autoplayGIF = data.gif_auto_play;
+      this.autoplayGIF = null;
     }
     if ('render_embeds' in data) {
       /**
        * Show embeds and preview website links pasted into chat
        * @type {?boolean}
        */
-      this.previewLink = data.render_embeds;
+      this.previewLink = null;
     }
     if ('animate_emoji' in data) {
       /**
@@ -93,7 +93,7 @@ class ClientUserSettingManager extends BaseManager {
        * <info>Setting => APP SETTINGS => Accessibility => Play Animated Emojis</info>
        * @type {?boolean}
        */
-      this.animatedEmoji = data.animate_emoji;
+      this.animatedEmoji = null;
     }
     if ('enable_tts_command' in data) {
       /**
@@ -101,7 +101,7 @@ class ClientUserSettingManager extends BaseManager {
        * <info>Setting => APP SETTINGS => Accessibility => Text-to-speech => Allow playback</info>
        * @type {?boolean}
        */
-      this.allowTTS = data.enable_tts_command;
+      this.allowTTS = null;
     }
     if ('message_display_compact' in data) {
       /**
@@ -109,7 +109,7 @@ class ClientUserSettingManager extends BaseManager {
        * <info>Setting => APP SETTINGS => Appearance => Message Display => Compact Mode</info>
        * @type {?boolean}
        */
-      this.compactMode = data.message_display_compact;
+      this.compactMode = null;
     }
     if ('convert_emoticons' in data) {
       /**
@@ -117,7 +117,7 @@ class ClientUserSettingManager extends BaseManager {
        * <info>Setting => APP SETTINGS => Text & Images => Emoji => Convert Emoticons</info>
        * @type {?boolean}
        */
-      this.convertEmoticons = data.convert_emoticons;
+      this.convertEmoticons = null;
     }
     if ('explicit_content_filter' in data) {
       /**
@@ -129,7 +129,7 @@ class ClientUserSettingManager extends BaseManager {
        * </info>
        * @type {?number}
        */
-      this.DMScanLevel = data.explicit_content_filter;
+      this.DMScanLevel = null;
     }
     if ('theme' in data) {
       /**
@@ -147,14 +147,14 @@ class ClientUserSettingManager extends BaseManager {
        * Show the option to copy ids in right click menus
        * @type {?boolean}
        */
-      this.developerMode = data.developer_mode;
+      this.developerMode = null;
     }
     if ('afk_timeout' in data) {
       /**
        * How many seconds being idle before the user is marked as "AFK"; this handles when push notifications are sent
        * @type {?number}
        */
-      this.afkTimeout = data.afk_timeout;
+      this.afkTimeout = null;
     }
     if ('animate_stickers' in data) {
       /**
@@ -166,7 +166,7 @@ class ClientUserSettingManager extends BaseManager {
        * </info>
        * @type {?number}
        */
-      this.stickerAnimationMode = data.animate_stickers;
+      this.stickerAnimationMode = null;
     }
     if ('render_reactions' in data) {
       /**
@@ -174,46 +174,7 @@ class ClientUserSettingManager extends BaseManager {
        * <info>Setting => APP SETTINGS => Text & Images => Emoji => Show emoji reactions</info>
        * @type {?boolean}
        */
-      this.showEmojiReactions = data.render_reactions;
-    }
-    if ('status' in data) {
-      this.client.presence.status = data.status;
-      if (!('custom_status' in data)) {
-        this.client.emit('debug', '[SETTING > ClientUser] Sync status');
-        this.client.user.setStatus(data.status);
-      }
-    }
-    if ('custom_status' in data) {
-      this.customStatus = data.custom_status;
-      const activities = this.client.presence.activities.filter(
-        a => ![ActivityTypes.CUSTOM, 'CUSTOM'].includes(a.type),
-      );
-      if (data.custom_status) {
-        const custom = new CustomStatus();
-        custom.setState(data.custom_status.text);
-        let emoji;
-        if (data.custom_status.emoji_id) {
-          emoji = this.client.emojis.cache.get(data.custom_status.emoji_id);
-        } else if (data.custom_status.emoji_name) {
-          emoji = `:${data.custom_status.emoji_name}:`;
-        }
-        if (emoji) custom.setEmoji(emoji);
-        activities.push(custom);
-      }
-      this.client.emit('debug', '[SETTING > ClientUser] Sync activities & status');
-      this.client.user.setPresence({ activities });
-    }
-    if ('friend_source_flags' in data) {
-      // Todo
-    }
-    if ('restricted_guilds' in data) {
-      /**
-       * Disable Direct Message from servers
-       * @type {Collection<Snowflake, Guild>}
-       */
-      this.disableDMfromGuilds = new Collection(
-        data.restricted_guilds.map(guildId => [guildId, this.client.guilds.cache.get(guildId)]),
-      );
+      this.showEmojiReactions = null;
     }
   }
 
